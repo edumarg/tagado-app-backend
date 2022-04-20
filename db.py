@@ -9,18 +9,28 @@ def connect_to_db():
 
 
 def get_all_data(client):
-    data_dict = {}
+    data_array = []
     data = client['NLP']['TERMS'].find({})
     for term in data:
-        term['_id'] = str(term['_id'])
-        data_dict[term['_id']] = term
+        del term['_id']
+        data_array.append(term)
     # print(list(data))
-    return data_dict
+    return data_array
 
 
 def add_new_terms(term, client):
     return client['NLP']['TERMS'].insert_one(term)
 
 
-def get_terms_count(type, client):
-    pass
+def get_terms_count(my_type, client):
+    my_terms = {}
+    data = client['NLP']['TERMS'].find({"type": my_type})
+    for type in data:
+        del type['_id']
+        for term in type["terms"]:
+            if term not in my_terms:
+                my_terms[term] = 1
+            else:
+                my_terms[term] += 1
+    print("my terms", my_terms)
+    return my_terms

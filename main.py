@@ -20,10 +20,16 @@ def get_all_data():
 @app.route("/type/new", methods=["POST"])
 def add_new_terms():
     terms = request.json
-    print("---received terms--")
-    print(terms)
     db.add_new_terms(terms, my_client)
     response = app.response_class(response="Terms added to the database", status=200, mimetype='application/json')
+    return response
+
+
+# GET info from a specific type
+@app.route("/type/<int:my_type>", methods=["GET"])
+def get_terms_count(my_type):
+    data = db.get_terms_count(my_type, my_client)
+    response = app.response_class(response=json.dumps(data), status=200, mimetype="application/json")
     return response
 
 

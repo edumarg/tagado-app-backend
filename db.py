@@ -14,7 +14,6 @@ def get_all_data(client):
     for term in data:
         del term['_id']
         data_array.append(term)
-    # print(list(data))
     return data_array
 
 
@@ -25,12 +24,11 @@ def add_new_terms(term, client):
 def get_terms_count(my_type, client):
     my_terms = {}
     data = client['NLP']['TERMS'].find({"type": my_type})
-    for type in data:
-        del type['_id']
-        for term in type["terms"]:
+    for value in data:
+        del value['_id']
+        for term in value["terms"]:
             if term not in my_terms:
                 my_terms[term] = 1
             else:
                 my_terms[term] += 1
-    print("my terms", my_terms)
     return my_terms
